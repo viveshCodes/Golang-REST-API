@@ -47,6 +47,17 @@ func getBooks(w http.ResponseWriter ,r *http.Request){
 }
 //getBook
 func getBook(w http.ResponseWriter ,r *http.Request){
+	w.Header().Set("Content-Type","application/json")
+	params :=mux.Vars(r)  // Get params . In this context we'll get id
+
+	// Loop through all books and find the correct id
+	for _,item :=range books{     // range is used to loop through map,slice ,or any data structure       
+		if item.ID ==params["id"] {
+			json.NewEncoder(w).Encode(item)
+			return
+		}
+	} 
+	json.NewEncoder(w).Encode(&Book{})
 	
 }
 //createBook

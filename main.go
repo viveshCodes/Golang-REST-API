@@ -3,13 +3,11 @@ package main
 /*_______Import Section_______________
 ______________________________________*/
 import (
-	//	"encoding/json"
 	"encoding/json"
 	"log"
 	"net/http"
-
-	//	"math/rand"
-	//	"strconv"
+	"math/rand"
+	"strconv"
 	"github.com/gorilla/mux" // To import this ,we should install it using ``` go get -u gthub.com/gorilla/mux ```
 )
 
@@ -62,7 +60,12 @@ func getBook(w http.ResponseWriter ,r *http.Request){
 }
 //createBook
 func createBook(w http.ResponseWriter ,r *http.Request){
-	
+	w.Header().Set("Content-Type","application/json")
+	var book Book
+	_=json.NewDecoder(r.Body).Decode(&book)
+	book.ID = strconv.Itoa(rand.Intn(10000000)) // It's Mock ID -not safe .We shouldn't use this for production.
+	books = append(books,book)
+	json.NewEncoder(w).Encode(book)
 }
 //updateBook
 func updateBook(w http.ResponseWriter ,r *http.Request){
@@ -70,7 +73,15 @@ func updateBook(w http.ResponseWriter ,r *http.Request){
 }
 //deleteBook
 func deleteBook(w http.ResponseWriter ,r *http.Request){
-	
+	w.Header().Set("Content-Type","application/json")
+	params := mux.Vars(r)  
+	for index,item :=range books{     // range is used to loop through map,slice ,or any data structure       
+		if item.ID == params ["id"] {
+			books = append(books[:index],books[index+1:]...)
+			break
+		}
+	} 
+	json.NewEncoder(w).Encode(books)	
 }
 
 

@@ -48,11 +48,11 @@ func getBooks(w http.ResponseWriter ,r *http.Request){
 //getBook
 func getBook(w http.ResponseWriter ,r *http.Request){
 	w.Header().Set("Content-Type","application/json")
-	params :=mux.Vars(r)  // Get params . In this context we'll get id
+	params := mux.Vars(r)  // Get params . In this context we'll get id
 
 	// Loop through all books and find the correct id
 	for _,item :=range books{     // range is used to loop through map,slice ,or any data structure       
-		if item.ID ==params["id"] {
+		if item.ID == params ["id"] {
 			json.NewEncoder(w).Encode(item)
 			return
 		}
@@ -87,10 +87,10 @@ func main(){
  // Create Route Handlers / These route handlers will establish Endpoints for our API
  // HandleFunc("routes,function")
  router.HandleFunc("/api/books",getBooks).Methods("GET")
- router.HandleFunc("/api/books{id}",getBook).Methods("GET")
+ router.HandleFunc("/api/books/{id}",getBook).Methods("GET")
  router.HandleFunc("/api/books",createBook).Methods("POST")
- router.HandleFunc("/api/books{id}",updateBook).Methods("PUT")
- router.HandleFunc("/api/books{id}",deleteBook).Methods("DELETE")
+ router.HandleFunc("/api/books/{id}",updateBook).Methods("PUT")
+ router.HandleFunc("/api/books/{id}",deleteBook).Methods("DELETE")
 
  // To run server
  log.Fatal(http.ListenAndServe(":8000",router)) // We've used log.Fatal() to catch error
